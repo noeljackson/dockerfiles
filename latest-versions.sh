@@ -60,7 +60,6 @@ camlistore/camlistore
 certbot/certbot
 hashicorp/consul
 CouchPotato/CouchPotatoServer
-pooler/cpuminer
 curl/curl
 opendnssec/SoftHSMv2
 google/guetzli
@@ -76,7 +75,6 @@ tarsnap/tarsnap
 fcambus/telize
 mitchellh/vagrant
 hashicorp/vault
-facebook/watchman
 wireguard/wireguard
 znc/znc
 apache/zookeeper
