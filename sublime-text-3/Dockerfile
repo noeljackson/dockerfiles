@@ -35,6 +35,9 @@ RUN apt-get update && apt-get -y install \
 	--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+	&& apt-get install -y nodejs
+
 # Generate system-wide UTF-8 locale
 # Sublime might nag about Ascii issue w/ Package Control otherwise
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
