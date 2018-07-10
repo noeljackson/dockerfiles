@@ -1,23 +1,23 @@
-FROM ubuntu:16.04
+FROM debian:sid
 LABEL maintainer "Christian Koep <christiankoep@gmail.com>"
 
-ENV POWERSHELL_VERSION 6.0.0-beta.6
+ENV POWERSHELL_VERSION 6.1.0-preview.3
 
 RUN apt-get update && apt-get install -y \
 	ca-certificates \
 	curl \
-	libcurl3 \
-	libicu55 \
-	libssl1.0.0 \
-	libunwind8 \
 	dpkg \
+	libicu57 \
+	libssl1.0.2 \
+	liblttng-ust0 \
 	--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN cd /usr/src \
-	&& curl -L -O https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell_${POWERSHELL_VERSION}-1ubuntu1.16.04.1_amd64.deb \
-	&& dpkg -i powershell_${POWERSHELL_VERSION}-1ubuntu1.16.04.1_amd64.deb \
+	&& curl -L -O "https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-preview_${POWERSHELL_VERSION}-1.debian.9_amd64.deb" \
+	&& dpkg -i "powershell-preview_${POWERSHELL_VERSION}-1.debian.9_amd64.deb" \
+	&& ln -snf /opt/microsoft/powershell/6-preview/pwsh /usr/bin/pwsh \
 	&& apt-get install -fy \
 	&& rm -rf /var/lib/apt/lists/* /usr/src/*
 
-ENTRYPOINT [ "/usr/bin/powershell" ]
+ENTRYPOINT [ "/usr/bin/pwsh" ]

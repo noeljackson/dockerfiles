@@ -10,6 +10,7 @@
 #	-v $HOME/.config/google-chrome/:/data \ # if you want to save state
 #	--security-opt seccomp=$HOME/chrome.json \
 #	--device /dev/snd \ # so we have sound
+#   --device /dev/dri \
 #	-v /dev/shm:/dev/shm \
 #	--name chrome \
 #	jess/chrome
@@ -30,6 +31,7 @@ RUN apt-get update && apt-get install -y \
 	curl \
 	gnupg \
 	hicolor-icon-theme \
+	libcanberra-gtk* \
 	libgl1-mesa-dri \
 	libgl1-mesa-glx \
 	libpango1.0-0 \
@@ -42,10 +44,20 @@ RUN apt-get update && apt-get install -y \
 	&& apt-get update && apt-get install -y \
 	google-chrome-stable \
 	--no-install-recommends \
-	&& dpkg -i '/src/google-talkplugin_current_amd64.deb' \
 	&& apt-get purge --auto-remove -y curl \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Download the google-talkplugin
+RUN set -x \
+	&& apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		ca-certificates \
+		curl \
 	&& rm -rf /var/lib/apt/lists/* \
-	&& rm -rf /src/*.deb
+	&& curl -sSL "https://dl.google.com/linux/direct/google-talkplugin_current_amd64.deb" -o /tmp/google-talkplugin-amd64.deb \
+	&& dpkg -i /tmp/google-talkplugin-amd64.deb \
+	&& rm -rf /tmp/*.deb \
+	&& apt-get purge -y --auto-remove curl
 
 # Add chrome user
 RUN groupadd -r chrome && useradd -r -g chrome -G audio,video chrome \
