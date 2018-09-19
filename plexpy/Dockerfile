@@ -11,10 +11,11 @@ FROM alpine:latest
 RUN apk add --no-cache \
 	ca-certificates \
 	git \
-	python
+	python \
+	py-pip
 
 # Get the source
-ENV PLEXPY_VERSION v2.1.16-beta
+ENV PLEXPY_VERSION v2.1.20
 RUN git clone https://github.com/Tautulli/Tautulli.git /opt/plexpy \
 	&& ( \
 		cd /opt/plexpy \

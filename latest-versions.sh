@@ -81,12 +81,13 @@ get_latest_unifi() {
 
 compare() {
 	local name="$1" dir="$2" tag="$3" current="$4" releases="$5"
+	ignore_dirs=( "bazel" "bcc" "mc" "nzbget" "powershell" "rstudio" )
 
 	if [[ "$tag" =~ "$current" ]] || [[ "$name" =~ "$current" ]] || [[ "$current" =~ "$tag" ]] || [[ "$current" == "master" ]]; then
 		echo -e "\e[36m${dir}:\e[39m current ${current} | ${tag} | ${name}"
 	else
 		# add to the bad versions
-		if [[ "$dir" != "rstudio" ]] && [[ "$dir" != "bazel" ]]; then
+		if [[ ! " ${ignore_dirs[@]} " =~ " ${dir} " ]]; then
 			bad_versions+=( "${dir}" )
 		fi
 		echo -e "\e[31m${dir}:\e[39m current ${current} | ${tag} | ${name} | ${releases}"
@@ -95,11 +96,14 @@ compare() {
 
 projects=(
 noelbundick/azure-cli-extension-noelbundick
+iovisor/bcc
+browsh-org/browsh
 certbot/certbot
 hashicorp/consul
 coredns/coredns
 CouchPotato/CouchPotatoServer
 curl/curl
+kolide/fleet
 GoogleCloudPlatform/cloud-sdk-docker
 google/gitiles
 bazelbuild/bazel
@@ -107,11 +111,16 @@ google/guetzli
 irssi/irssi
 cryptodotis/irssi-otr
 keepassxreboot/keepassxc
+robertdavidgraham/masscan
+MidnightCommander/mc
 zyedidia/micro
+nzbget/nzbget
 bitly/oauth2_proxy
+facebook/osquery
 Tautulli/Tautulli
 perkeep/perkeep
 powershell/powershell
+Radarr/Radarr
 cesanta/docker_auth
 ricochet-im/ricochet
 reverse-shell/routersploit

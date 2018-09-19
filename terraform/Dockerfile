@@ -11,7 +11,7 @@ RUN	apk add --no-cache \
 	make \
 	zip
 
-ENV TERRAFORM_VERSION v0.11.7
+ENV TERRAFORM_VERSION v0.11.8
 
 RUN go get github.com/hashicorp/terraform
 
@@ -23,10 +23,14 @@ RUN git checkout "${TERRAFORM_VERSION}"
 # See: https://github.com/golang/go/issues/10249
 RUN go install ./vendor/...
 
-RUN XC_ARCH="amd64" XC_OS="linux" LD_FLAGS=" -extldflags -static" make bin \
+RUN XC_ARCH="amd64" XC_OS="linux" LD_FLAGS=" -extldflags -static" make fmt bin \
 	&& mv bin/terraform /usr/bin/terraform
 
 FROM alpine:latest
+
+RUN apk add --no-cache \
+	bash \
+	tar
 
 COPY --from=builder /usr/bin/terraform /usr/bin/terraform
 COPY --from=builder /etc/ssl/certs/ /etc/ssl/certs
